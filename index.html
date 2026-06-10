@@ -1,5 +1,534 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta name="google-site-verification" content="i4gnPDt32XHox-ySA3J3RzdJ_zubC5hUW7WNdtvs7vI" /></head>
-<body></body>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GetsDone — Prioritize. Capture. Plan. Done.</title>
+<style>
+  :root{
+    --primary:#1565C0;
+    --primary-dark:#003C8F;
+    --do:#EF5350;
+    --schedule:#42A5F5;
+    --delegate:#FFA726;
+    --eliminate:#66BB6A;
+    --ink:#0E1B2A;
+    --muted:#5C6B7A;
+    --bg:#FFFFFF;
+    --bg-alt:#F5F7FA;
+    --card:#FFFFFF;
+    --border:#E7ECF1;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+
+  /* Nav */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,0.7);
+    backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border);
+  }
+  nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:1180px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;}
+  .brand img{width:30px;height:30px;border-radius:7px;}
+  .nav-links{display:flex;gap:36px;font-size:14px;font-weight:500;color:var(--muted);}
+  .nav-links a{transition:color .15s ease;}
+  .nav-links a:hover{color:var(--ink);}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    padding:13px 28px;border-radius:980px;font-weight:600;font-size:15px;
+    background:var(--primary);color:#fff;border:none;cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 10px 24px rgba(21,101,192,.28);}
+  .btn-outline{
+    background:transparent;color:var(--ink);border:1.5px solid var(--border);
+  }
+  .btn-outline:hover{border-color:var(--primary);color:var(--primary);background:rgba(21,101,192,.04);transform:translateY(-1px);box-shadow:none;}
+  .btn-sm{padding:9px 20px;font-size:14px;}
+
+  /* Hero */
+  .hero{
+    padding:110px 0 0;
+    text-align:center;
+    background:
+      radial-gradient(60% 50% at 50% 0%, rgba(21,101,192,.10) 0%, rgba(21,101,192,0) 70%);
+    overflow:hidden;
+  }
+  .eyebrow{
+    display:inline-block;padding:6px 18px;border-radius:999px;
+    background:rgba(21,101,192,.08);color:var(--primary);
+    font-size:13px;font-weight:700;letter-spacing:.04em;margin-bottom:24px;
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-size:68px;line-height:1.08;font-weight:800;letter-spacing:-0.025em;
+    max-width:840px;margin:0 auto 22px;
+  }
+  .hero h1 span{
+    background:linear-gradient(135deg,var(--primary),#5C6BC0);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p{
+    font-size:21px;color:var(--muted);max-width:600px;margin:0 auto 36px;
+    font-weight:400;
+  }
+  .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:64px;}
+  .store-badge{
+    display:inline-flex;align-items:center;gap:10px;
+    background:#000;color:#fff;padding:11px 22px;border-radius:12px;
+    font-size:14px;transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .store-badge:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(0,0,0,.25);}
+  .store-badge .store-text{text-align:left;line-height:1.2;}
+  .store-badge .store-text small{display:block;font-size:10px;opacity:.75;}
+  .store-badge .store-text strong{font-size:16px;font-weight:600;}
+  .store-badge svg{width:24px;height:24px;flex-shrink:0;}
+
+  /* Hero visual */
+  .hero-stage{
+    position:relative;display:flex;justify-content:center;align-items:flex-end;
+    gap:24px;padding-top:20px;
+  }
+  .hero-stage .phone:nth-child(1){transform:rotate(-6deg) translateY(40px);}
+  .hero-stage .phone:nth-child(3){transform:rotate(6deg) translateY(40px);}
+  .hero-stage .phone:nth-child(2){z-index:2;}
+
+  /* Phone mockup */
+  .phone{
+    width:260px;height:540px;border-radius:32px;overflow:hidden;
+    box-shadow:0 30px 60px rgba(13,32,54,.22), 0 4px 12px rgba(13,32,54,.12);
+    flex-shrink:0;
+  }
+  .phone .screen{
+    width:100%;height:100%;background:#fff;
+    position:relative;display:flex;flex-direction:column;
+  }
+  .phone .screen img{
+    width:100%;height:100%;object-fit:cover;object-position:top;display:block;
+  }
+  .screen-status{height:34px;flex-shrink:0;}
+  .screen-header{
+    padding:34px 18px 12px;font-weight:700;font-size:17px;
+  }
+  .screen-body{flex:1;padding:0 14px 14px;display:flex;flex-direction:column;gap:10px;overflow:hidden;}
+
+  /* Eisenhower mockup */
+  .mx-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;flex:1;}
+  .mx-cell{border-radius:14px;padding:10px;color:#fff;display:flex;flex-direction:column;gap:6px;}
+  .mx-cell .mx-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;opacity:.9;}
+  .mx-task{
+    background:rgba(255,255,255,.18);border-radius:8px;padding:6px 8px;
+    font-size:10px;font-weight:600;
+  }
+  .mx-do{background:linear-gradient(160deg,var(--do),#C62828);}
+  .mx-schedule{background:linear-gradient(160deg,var(--schedule),var(--primary-dark));}
+  .mx-delegate{background:linear-gradient(160deg,var(--delegate),#E65100);}
+  .mx-eliminate{background:linear-gradient(160deg,var(--eliminate),#1B5E20);}
+
+  /* Timeline mockup */
+  .tl-row{display:flex;gap:10px;align-items:flex-start;}
+  .tl-time{font-size:10px;color:var(--muted);width:36px;flex-shrink:0;padding-top:10px;font-weight:600;}
+  .tl-block{flex:1;border-radius:10px;padding:10px 12px;font-size:12px;font-weight:700;color:#fff;}
+  .tl-block small{display:block;font-weight:500;font-size:10px;opacity:.85;margin-top:2px;}
+  .tl-free{
+    flex:1;border:1.5px dashed var(--border);border-radius:10px;padding:8px 12px;
+    font-size:11px;color:var(--muted);font-weight:600;
+  }
+
+  /* Voice mockup */
+  .voice-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;}
+  .voice-orb{
+    width:96px;height:96px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #66BB6A, #2E7D32);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:36px;
+    box-shadow:0 0 0 12px rgba(46,125,50,.10), 0 0 0 24px rgba(46,125,50,.06);
+  }
+  .voice-text{
+    background:var(--bg-alt);border-radius:12px;padding:12px 16px;font-size:13px;
+    font-weight:600;color:var(--ink);text-align:center;
+  }
+  .voice-pill{
+    font-size:11px;color:var(--muted);font-weight:600;
+  }
+
+  /* Completed mockup */
+  .done-row{
+    display:flex;align-items:center;gap:10px;background:var(--bg-alt);
+    border-radius:10px;padding:10px 12px;
+  }
+  .done-check{
+    width:20px;height:20px;border-radius:50%;background:var(--eliminate);
+    color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;
+  }
+  .done-row span{font-size:12px;font-weight:600;text-decoration:line-through;color:var(--muted);}
+  .done-stats{
+    display:flex;gap:10px;margin-top:4px;
+  }
+  .done-stat{
+    flex:1;background:linear-gradient(135deg,var(--primary),#5C6BC0);color:#fff;
+    border-radius:12px;padding:14px;text-align:center;
+  }
+  .done-stat .num{font-size:24px;font-weight:800;}
+  .done-stat .lbl{font-size:10px;opacity:.85;font-weight:600;}
+
+  /* Reminder mockup */
+  .notif-card{
+    background:var(--bg-alt);border-radius:14px;padding:14px;display:flex;gap:12px;align-items:flex-start;
+  }
+  .notif-icon{
+    width:34px;height:34px;border-radius:9px;background:var(--primary);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;
+  }
+  .notif-body strong{font-size:12px;display:block;margin-bottom:2px;}
+  .notif-body p{font-size:11px;color:var(--muted);line-height:1.4;}
+  .notif-time{font-size:9px;color:var(--muted);margin-left:auto;flex-shrink:0;}
+
+  /* Floating button mockup */
+  .fab{
+    position:absolute;bottom:60px;right:14px;width:52px;height:52px;border-radius:50%;
+    background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:22px;box-shadow:0 8px 20px rgba(21,101,192,.4);z-index:6;
+  }
+
+  /* Sections */
+  section{padding:100px 0;}
+  .section-head{text-align:center;max-width:680px;margin:0 auto 64px;}
+  .section-head .eyebrow{margin-bottom:18px;}
+  .section-head h2{font-size:44px;font-weight:800;letter-spacing:-0.02em;margin-bottom:16px;}
+  .section-head p{color:var(--muted);font-size:19px;}
+
+  .alt-bg{background:var(--bg-alt);}
+
+  /* Feature row (Apple-style alternating) */
+  .feature-row{
+    display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+  }
+  .feature-row.reverse .feature-text{order:2;}
+  .feature-row.reverse .feature-visual{order:1;}
+  .feature-row + .feature-row{margin-top:140px;}
+  .feature-text .tag{
+    display:inline-block;font-size:13px;font-weight:700;color:var(--primary);
+    text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;
+  }
+  .feature-text h3{font-size:38px;font-weight:800;letter-spacing:-0.02em;margin-bottom:18px;line-height:1.15;}
+  .feature-text p{font-size:18px;color:var(--muted);margin-bottom:24px;}
+  .feature-list{list-style:none;display:flex;flex-direction:column;gap:12px;}
+  .feature-list li{
+    display:flex;align-items:flex-start;gap:12px;font-size:15px;font-weight:500;color:var(--ink);
+  }
+  .feature-list .dot{
+    width:22px;height:22px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:12px;font-weight:700;margin-top:1px;
+  }
+  .feature-visual{display:flex;justify-content:center;}
+
+  /* Quick grid (small features) */
+  .mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:80px;}
+  .mini-card{
+    background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .mini-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(13,32,54,.06);}
+  .mini-icon{
+    width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    font-size:20px;margin-bottom:16px;color:#fff;
+  }
+  .mini-card h4{font-size:17px;font-weight:700;margin-bottom:8px;}
+  .mini-card p{color:var(--muted);font-size:14px;}
+
+  /* Pre-register */
+  .preregister{
+    background:var(--card);border:1px solid var(--border);border-radius:28px;
+    padding:64px 32px;text-align:center;
+  }
+  .preregister .eyebrow{background:rgba(102,187,106,.12);color:#1B5E20;}
+  .preregister h2{font-size:36px;font-weight:800;letter-spacing:-0.02em;margin-bottom:12px;}
+  .preregister p{color:var(--muted);font-size:17px;max-width:520px;margin:0 auto 32px;}
+  .preregister-form{
+    display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:460px;margin:0 auto;
+  }
+  .preregister-form input{
+    flex:1;min-width:220px;padding:14px 20px;border-radius:980px;
+    border:1.5px solid var(--border);font-size:15px;font-family:inherit;outline:none;
+    transition:border-color .15s ease;
+  }
+  .preregister-form input:focus{border-color:var(--primary);}
+  .preregister-note{font-size:13px;color:var(--muted);margin-top:16px;}
+  .preregister-success{
+    display:none;font-size:15px;font-weight:600;color:var(--eliminate);margin-top:16px;
+  }
+
+  /* CTA */
+  .cta{
+    text-align:center;background:linear-gradient(135deg,var(--primary),#1A237E);
+    border-radius:28px;padding:80px 32px;color:#fff;
+  }
+  .cta h2{font-size:42px;font-weight:800;margin-bottom:14px;letter-spacing:-0.02em;}
+  .cta p{color:rgba(255,255,255,.85);font-size:18px;margin-bottom:36px;}
+  .cta .store-badge{background:#fff;color:#000;}
+  .cta-actions{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
+
+  /* Footer */
+  footer{border-top:1px solid var(--border);padding:40px 0;}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+  footer .brand{font-size:16px;}
+  footer .copy{color:var(--muted);font-size:14px;}
+
+  @media (max-width:900px){
+    .hero h1{font-size:42px;}
+    .hero p{font-size:18px;}
+    .feature-row{grid-template-columns:1fr;gap:48px;}
+    .feature-row.reverse .feature-text{order:1;}
+    .feature-row.reverse .feature-visual{order:2;}
+    .feature-row + .feature-row{margin-top:80px;}
+    .mini-grid{grid-template-columns:1fr 1fr;}
+    .nav-links{display:none;}
+    .hero-stage .phone:nth-child(1),.hero-stage .phone:nth-child(3){display:none;}
+    .section-head h2{font-size:32px;}
+    .feature-text h3{font-size:28px;}
+  }
+  @media (max-width:560px){
+    .mini-grid{grid-template-columns:1fr;}
+    .phone{width:230px;height:480px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="brand"><img src="assets/icon.png" alt="GetsDone logo">GetsDone</div>
+    <div class="nav-links">
+      <a href="#matrix">Prioritize</a>
+      <a href="#capture">Capture</a>
+      <a href="#planning">Plan</a>
+      <a href="#progress">Progress</a>
+    </div>
+    <a href="https://play.google.com/store/apps/details?id=com.productivity.getsdone" class="btn btn-sm">Get the app</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Productivity, simplified</span>
+    <h1>Get clarity on what matters.<br><span>Get it done.</span></h1>
+    <p>GetsDone helps you capture tasks the moment they cross your mind, prioritize them with the Eisenhower Matrix, and plan your day on a simple visual timeline.</p>
+    <div class="hero-actions">
+      <a href="https://play.google.com/store/apps/details?id=com.productivity.getsdone" class="store-badge">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.6 2.6c-.4.3-.6.8-.6 1.4v16c0 .6.2 1.1.6 1.4l9.4-9.4-9.4-9.4Z" opacity=".6"/><path d="M16.5 9.5 5.4 2.7l9.6 9.6 1.5-1.5ZM4.6 21.3l11.1-6.8-1.5-1.5-9.6 9.6c.1 0 .1.1.2.1.1 0 .2 0 .3-.1Zm12.7-7.6L21 11.1c.6-.4.6-1.3 0-1.7l-3.7-2.1L15.5 9l1.8 1.8 1.5-1.5L21 11.1l-3.7 2.1Z"/></svg>
+        <span class="store-text"><small>GET IT ON</small><strong>Google Play</strong></span>
+      </a>
+      <a href="#matrix" class="btn btn-outline">See how it works</a>
+    </div>
+
+    <!-- Phone stage -->
+    <div class="hero-stage">
+      <!-- Left phone: Plan / Timeline -->
+      <div class="phone">
+        <div class="screen">
+          <img src="assets/screenshot_plan.png" alt="GetsDone day timeline screen">
+        </div>
+      </div>
+      <!-- Center phone: Eisenhower Matrix -->
+      <div class="phone">
+        <div class="screen">
+          <img src="assets/screenshot_matrix.png" alt="GetsDone Eisenhower matrix screen">
+        </div>
+      </div>
+      <!-- Right phone: Tasks -->
+      <div class="phone">
+        <div class="screen">
+          <img src="assets/screenshot_tasks.png" alt="GetsDone tasks overview screen">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATRIX -->
+<section id="matrix">
+  <div class="wrap">
+    <div class="feature-row">
+      <div class="feature-text">
+        <span class="tag">Prioritize</span>
+        <h3>The Eisenhower Matrix, built right in.</h3>
+        <p>Every task gets sorted into one of four quadrants based on urgency and importance — so you always know what to tackle first, what to schedule, what to hand off, and what to let go of.</p>
+        <ul class="feature-list">
+          <li><span class="dot" style="background:var(--do)">!</span> <div><strong>Do</strong> — urgent and important. Handle it now.</div></li>
+          <li><span class="dot" style="background:var(--schedule)">📅</span> <div><strong>Schedule</strong> — important, not urgent. Plan time for it.</div></li>
+          <li><span class="dot" style="background:var(--delegate)">→</span> <div><strong>Delegate</strong> — urgent, but not yours to own.</div></li>
+          <li><span class="dot" style="background:var(--eliminate)">×</span> <div><strong>Eliminate</strong> — neither urgent nor important. Let it go.</div></li>
+        </ul>
+      </div>
+      <div class="feature-visual">
+        <div class="phone">
+          <div class="screen">
+              <img src="assets/screenshot_matrix.png" alt="GetsDone Eisenhower matrix screen">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPTURE -->
+<section id="capture" class="alt-bg">
+  <div class="wrap">
+    <div class="feature-row reverse">
+      <div class="feature-text">
+        <span class="tag">Capture</span>
+        <h3>Say it. It's a task.</h3>
+        <p>Add tasks by typing or speaking — never lose a thought. A small floating button stays on your screen so you can capture an idea the instant it strikes, without ever opening the app.</p>
+        <ul class="feature-list">
+          <li><span class="dot" style="background:var(--eliminate)">🎙</span> <div><strong>Voice capture</strong> — speak your task and GetsDone turns it into an action item.</div></li>
+          <li><span class="dot" style="background:#5C6BC0">＋</span> <div><strong>Floating quick-add</strong> — a persistent on-screen button for instant capture from any app.</div></li>
+          <li><span class="dot" style="background:var(--primary)">⌨</span> <div><strong>Type when you'd rather not talk</strong> — full keyboard entry, always available.</div></li>
+        </ul>
+      </div>
+      <div class="feature-visual">
+        <div class="phone">
+          <div class="screen">
+              <img src="assets/screenshot_voice.png" alt="GetsDone voice capture screen">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANNING -->
+<section id="planning">
+  <div class="wrap">
+    <div class="feature-row">
+      <div class="feature-text">
+        <span class="tag">Plan your day</span>
+        <h3>From wake-up to wind-down.</h3>
+        <p>See your day laid out on a visual timeline between wake-up and bedtime. Drag tasks into open slots, see exactly how much free time you have, and let GetsDone gently nudge you along the way.</p>
+        <ul class="feature-list">
+          <li><span class="dot" style="background:var(--primary)">☀️</span> <div><strong>Morning planning prompt</strong> — a wake-up alarm reminds you to set up your day.</div></li>
+          <li><span class="dot" style="background:#5C6BC0">🗓</span> <div><strong>Visual timeline</strong> — tasks, free time, and gaps shown at a glance.</div></li>
+          <li><span class="dot" style="background:var(--eliminate)">🔔</span> <div><strong>Mid-day check-ins</strong> — a gentle reminder to re-prioritize what's left.</div></li>
+        </ul>
+      </div>
+      <div class="feature-visual">
+        <div class="phone">
+          <div class="screen">
+              <img src="assets/screenshot_plan.png" alt="GetsDone day timeline screen">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<section id="progress" class="alt-bg">
+  <div class="wrap">
+    <div class="feature-row reverse">
+      <div class="feature-text">
+        <span class="tag">Stay motivated</span>
+        <h3>Watch your wins add up.</h3>
+        <p>Every completed task moves to your progress view, so you can see exactly how much you've accomplished — and build momentum to keep going.</p>
+        <ul class="feature-list">
+          <li><span class="dot" style="background:var(--eliminate)">✓</span> <div><strong>Completed list</strong> — every finished task, all in one place.</div></li>
+          <li><span class="dot" style="background:var(--primary)">📊</span> <div><strong>Daily stats</strong> — see your task count and completion rate.</div></li>
+          <li><span class="dot" style="background:var(--delegate)">🔁</span> <div><strong>Reminders & boot persistence</strong> — your routines keep running, even after a restart.</div></li>
+        </ul>
+      </div>
+      <div class="feature-visual">
+        <div class="phone">
+          <div class="screen">
+              <img src="assets/screenshot_tasks.png" alt="GetsDone tasks overview screen">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini grid: extra features -->
+    <div class="mini-grid">
+      <div class="mini-card">
+        <div class="mini-icon" style="background:var(--primary)">⏰</div>
+        <h4>Wake-up reminder</h4>
+        <p>A daily alarm prompts you to plan your tasks first thing in the morning.</p>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon" style="background:var(--eliminate)">🔔</div>
+        <h4>Mid-day nudge</h4>
+        <p>A check-in notification helps you reassess priorities partway through your day.</p>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon" style="background:#5C6BC0">＋</div>
+        <h4>Floating quick-add</h4>
+        <p>Capture tasks from any screen with a small floating button that follows you.</p>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon" style="background:var(--delegate)">🌐</div>
+        <h4>Multi-language</h4>
+        <p>Use GetsDone in your preferred language, with full localization support.</p>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon" style="background:var(--do)">📁</div>
+        <h4>Categorized tasks</h4>
+        <p>Group tasks by category for a clear, organized view of everything you own.</p>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon" style="background:var(--primary-dark)">🔄</div>
+        <h4>Survives a restart</h4>
+        <p>Reminders and the floating button automatically resume after your device reboots.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRE-REGISTER -->
+<section id="preregister">
+  <div class="wrap">
+    <div class="preregister">
+      <span class="eyebrow">Coming to Google Play</span>
+      <h2>Pre-register on Google Play</h2>
+      <p>Pre-register now and GetsDone will land automatically in your library the moment it's released — plus you'll get a notification so you never miss launch day.</p>
+      <div class="preregister-form">
+        <a href="https://play.google.com/store/apps/details?id=com.productivity.getsdone" class="btn">Pre-register on Google Play</a>
+      </div>
+      <p class="preregister-note">Free to reserve — no payment required, install happens automatically at launch.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="download">
+  <div class="wrap">
+    <div class="cta">
+      <h2>Ready to get things done?</h2>
+      <p>Download GetsDone and turn your to-do list into a clear, prioritized plan for every day.</p>
+      <div class="cta-actions">
+        <a href="https://play.google.com/store/apps/details?id=com.productivity.getsdone" class="store-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.6 2.6c-.4.3-.6.8-.6 1.4v16c0 .6.2 1.1.6 1.4l9.4-9.4-9.4-9.4Z" opacity=".6"/><path d="M16.5 9.5 5.4 2.7l9.6 9.6 1.5-1.5ZM4.6 21.3l11.1-6.8-1.5-1.5-9.6 9.6c.1 0 .1.1.2.1.1 0 .2 0 .3-.1Zm12.7-7.6L21 11.1c.6-.4.6-1.3 0-1.7l-3.7-2.1L15.5 9l1.8 1.8 1.5-1.5L21 11.1l-3.7 2.1Z"/></svg>
+          <span class="store-text"><small>GET IT ON</small><strong>Google Play</strong></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand"><img src="assets/icon.png" alt="GetsDone logo">GetsDone</div>
+    <div class="copy">© 2026 GetsDone. All rights reserved.</div>
+  </div>
+</footer>
+
+</body>
 </html>
