@@ -4,6 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GetsDone — Prioritize. Capture. Plan. Done.</title>
+<meta name="description" content="GetsDone is a to-do app that helps you capture tasks by voice or text, prioritize them with the Eisenhower Matrix, and plan your day on a visual timeline. Pre-register on Google Play.">
+<link rel="canonical" href="https://aksh2.github.io/">
+<link rel="icon" type="image/png" href="assets/icon.png">
+<link rel="apple-touch-icon" href="assets/icon.png">
+<meta name="theme-color" content="#1565C0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1420" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GetsDone">
+<meta property="og:title" content="GetsDone — Prioritize. Capture. Plan. Done.">
+<meta property="og:description" content="Capture tasks by voice or text, prioritize with the Eisenhower Matrix, and plan your day on a visual timeline.">
+<meta property="og:url" content="https://aksh2.github.io/">
+<meta property="og:image" content="https://aksh2.github.io/assets/screenshot_matrix.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GetsDone — Prioritize. Capture. Plan. Done.">
+<meta name="twitter:description" content="Capture tasks by voice or text, prioritize with the Eisenhower Matrix, and plan your day on a visual timeline.">
+<meta name="twitter:image" content="https://aksh2.github.io/assets/screenshot_matrix.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  "name": "GetsDone",
+  "operatingSystem": "ANDROID",
+  "applicationCategory": "ProductivityApplication",
+  "description": "Capture tasks by voice or text, prioritize them with the Eisenhower Matrix, and plan your day on a visual timeline.",
+  "url": "https://aksh2.github.io/",
+  "installUrl": "https://play.google.com/store/apps/details?id=com.productivity.getsdone",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
 <script>
   (function(){
     var stored = localStorage.getItem('gd-theme');
@@ -143,16 +172,34 @@
 
   /* Phone mockup */
   .phone{
-    width:260px;height:540px;border-radius:12px;overflow:hidden;
-    box-shadow:0 30px 60px rgba(13,32,54,.22), 0 4px 12px rgba(13,32,54,.12);
-    flex-shrink:0;background:#fff;padding:4px;
+    width:260px;height:540px;border-radius:38px;overflow:hidden;
+    box-shadow:0 30px 60px rgba(13,32,54,.22), 0 4px 12px rgba(13,32,54,.12),
+      inset 0 0 0 2px rgba(255,255,255,.08);
+    flex-shrink:0;background:#10151C;padding:10px;
+    border:1px solid #2A323D;
+    position:relative;
   }
   .phone .screen{
-    width:100%;height:100%;background:#fff;border-radius:12px;overflow:hidden;
+    width:100%;height:100%;background:#fff;border-radius:28px;overflow:hidden;
     position:relative;display:flex;flex-direction:column;
   }
   .phone .screen img{
-    width:100%;height:100%;object-fit:cover;object-position:top;display:block;
+    width:100%;height:calc(100% - 22px);margin-top:22px;
+    object-fit:cover;object-position:top;display:block;
+  }
+  /* Fake status bar */
+  .phone .screen::before{
+    content:"9:41";
+    position:absolute;top:0;left:0;right:0;height:22px;z-index:2;
+    padding:0 16px;display:flex;align-items:center;
+    font-size:11px;font-weight:700;color:#0E1B2A;background:#fff;
+    letter-spacing:.02em;
+  }
+  .phone .screen::after{
+    content:"";
+    position:absolute;top:5px;right:14px;width:46px;height:12px;z-index:3;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 12'%3E%3Cg fill='%230E1B2A'%3E%3Crect x='0' y='7' width='2.5' height='4' rx='.6'/%3E%3Crect x='4' y='5' width='2.5' height='6' rx='.6'/%3E%3Crect x='8' y='3' width='2.5' height='8' rx='.6'/%3E%3Crect x='12' y='1' width='2.5' height='10' rx='.6'/%3E%3Cpath d='M25 4.2a6.5 6.5 0 0 0-6.6 0l1 1.5a4.7 4.7 0 0 1 4.6 0zM23.9 6.6a3.4 3.4 0 0 0-4.4 0l1.1 1.6a1.6 1.6 0 0 1 2.2 0zM21.7 9.2l1 1.5-1 .1z'/%3E%3Ccircle cx='21.7' cy='10' r='1.1'/%3E%3Crect x='30' y='2' width='13' height='8' rx='2.4' fill='none' stroke='%230E1B2A' stroke-width='1.2'/%3E%3Crect x='31.5' y='3.5' width='8' height='5' rx='1.2'/%3E%3Crect x='44' y='4.5' width='1.8' height='3' rx='.9'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-size:contain;background-position:right center;
   }
   .screen-status{height:34px;flex-shrink:0;}
   .screen-header{
@@ -197,7 +244,67 @@
   }
   .voice-pill{
     font-size:11px;color:var(--muted);font-weight:600;
+    text-transform:uppercase;letter-spacing:.08em;
   }
+  .voice-chip{
+    font-size:11px;font-weight:700;color:#1B5E20;
+    background:rgba(102,187,106,.16);border-radius:999px;padding:6px 14px;
+  }
+  @keyframes orbPulse{
+    0%,100%{box-shadow:0 0 0 10px rgba(46,125,50,.12), 0 0 0 22px rgba(46,125,50,.06);}
+    50%{box-shadow:0 0 0 16px rgba(46,125,50,.16), 0 0 0 32px rgba(46,125,50,.07);}
+  }
+  .voice-orb{animation:orbPulse 2.2s ease-in-out infinite;}
+  .screen .screen-header{color:#0E1B2A;}
+
+  /* Voice screen: app background */
+  .vc-chips{display:flex;gap:8px;}
+  .vc-chip{
+    flex:1;display:flex;align-items:center;gap:6px;color:#fff;
+    border-radius:10px;padding:10px 12px;font-size:11px;font-weight:700;
+  }
+  .vc-chip b{margin-left:auto;font-size:13px;}
+  .vc-chip-red{background:#C62828;}
+  .vc-chip-green{background:#2E7D32;}
+  .vc-banner{
+    display:flex;align-items:center;gap:8px;background:#1565C0;color:#fff;
+    border-radius:10px;padding:10px 12px;font-size:11px;font-weight:600;
+  }
+  .vc-banner b{margin-left:auto;font-size:13px;}
+  .vc-task{
+    background:#F5F7FA;border:1px solid #E7ECF1;border-radius:10px;
+    padding:11px 12px;font-size:12px;font-weight:600;color:#0E1B2A;
+  }
+
+  /* Google voice sheet overlay */
+  .g-scrim{
+    position:absolute;inset:0;background:rgba(0,0,0,.32);z-index:4;
+    border-radius:28px;
+  }
+  .g-sheet{
+    position:absolute;left:0;right:0;bottom:0;z-index:5;
+    background:#fff;border-radius:22px 22px 28px 28px;
+    padding:26px 18px 30px;text-align:center;
+    box-shadow:0 -8px 30px rgba(0,0,0,.18);
+    display:flex;flex-direction:column;align-items:center;gap:18px;
+  }
+  .g-logo{font-size:22px;font-weight:500;letter-spacing:-.5px;font-family:Arial,Helvetica,sans-serif;}
+  .g-logo span:nth-child(1){color:#4285F4;}
+  .g-logo span:nth-child(2){color:#EA4335;}
+  .g-logo span:nth-child(3){color:#FBBC05;}
+  .g-logo span:nth-child(4){color:#4285F4;}
+  .g-logo span:nth-child(5){color:#34A853;}
+  .g-logo span:nth-child(6){color:#EA4335;}
+  .g-mic{position:relative;display:flex;align-items:center;justify-content:center;padding:8px;}
+  .g-arc{
+    position:absolute;width:54px;height:54px;border-radius:50%;
+    border:3px solid transparent;border-right-color:#34A853;
+    animation:gArc 1.4s linear infinite;
+  }
+  @keyframes gArc{to{transform:rotate(360deg);}}
+  .g-prompt{font-size:16px;color:#5F6368;font-weight:400;}
+  .g-lang{font-size:11px;color:#9AA0A6;}
+  @media (prefers-reduced-motion:reduce){.voice-orb,.g-arc{animation:none;}}
 
   /* Completed mockup */
   .done-row{
@@ -322,6 +429,87 @@
   footer .brand{font-size:16px;}
   footer .copy{color:var(--muted);font-size:14px;}
 
+  /* Hero ambience */
+  .hero .wrap{position:relative;}
+  .hero::before,.hero::after{
+    content:"";position:absolute;border-radius:50%;filter:blur(80px);
+    pointer-events:none;z-index:0;
+  }
+  .hero::before{
+    width:480px;height:480px;left:-140px;top:60px;
+    background:rgba(21,101,192,.14);
+  }
+  .hero::after{
+    width:420px;height:420px;right:-120px;top:180px;
+    background:rgba(92,107,192,.13);
+  }
+  .hero{position:relative;}
+  html[data-theme="dark"] .hero::before{background:rgba(91,155,240,.10);}
+  html[data-theme="dark"] .hero::after{background:rgba(92,107,192,.10);}
+
+  /* Phone hover + hero float */
+  .phone{transition:transform .35s ease, box-shadow .35s ease;}
+  .feature-visual .phone:hover{transform:translateY(-8px);box-shadow:0 40px 70px rgba(13,32,54,.28), 0 6px 16px rgba(13,32,54,.14);}
+  .hero-stage .phone:nth-child(1):hover{transform:rotate(-6deg) translateY(32px);}
+  .hero-stage .phone:nth-child(3):hover{transform:rotate(6deg) translateY(32px);}
+  .hero-stage .phone:nth-child(2):hover{transform:translateY(-8px);}
+  @keyframes heroRise{
+    from{opacity:0;transform:translateY(28px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .hero .eyebrow,.hero h1,.hero > .wrap > p,.hero-actions,.hero-stage{
+    animation:heroRise .7s cubic-bezier(.22,.61,.36,1) both;
+  }
+  .hero h1{animation-delay:.08s;}
+  .hero > .wrap > p{animation-delay:.16s;}
+  .hero-actions{animation-delay:.24s;}
+  .hero-stage{animation-delay:.34s;}
+
+  /* Gentle float on center hero phone */
+  @keyframes phoneFloat{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+  }
+  .hero-stage .phone:nth-child(2){animation:phoneFloat 6s ease-in-out 1.2s infinite;}
+  .hero-stage .phone:nth-child(2):hover{animation-play-state:paused;transform:translateY(-8px);}
+
+  /* Nav underline animation */
+  .nav-links a{position:relative;padding-bottom:3px;}
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:0;width:100%;height:2px;
+    background:var(--primary);border-radius:2px;
+    transform:scaleX(0);transform-origin:left;transition:transform .25s cubic-bezier(.22,.61,.36,1);
+  }
+  .nav-links a:hover::after{transform:scaleX(1);}
+
+  /* Button press + shine */
+  .btn:active,.store-badge:active{transform:translateY(0) scale(.97);}
+  .btn{position:relative;overflow:hidden;}
+  .btn::before{
+    content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;
+    background:linear-gradient(105deg,transparent,rgba(255,255,255,.28),transparent);
+    transform:skewX(-20deg);transition:left .5s ease;
+  }
+  .btn:hover::before{left:130%;}
+
+  /* Mini-card icon pop */
+  .mini-icon{transition:transform .25s cubic-bezier(.34,1.56,.64,1);}
+  .mini-card:hover .mini-icon{transform:scale(1.12) rotate(-4deg);}
+
+  /* Smooth anchor offset under sticky header */
+  section{scroll-margin-top:76px;}
+
+  /* Scroll reveal */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1);}
+  .reveal.visible{opacity:1;transform:none;}
+  .mini-card.reveal{transition-delay:var(--d,0s);}
+
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+    .hero .eyebrow,.hero h1,.hero > .wrap > p,.hero-actions,.hero-stage{animation:none;}
+    .hero-stage .phone:nth-child(2){animation:none;}
+  }
+
   @media (max-width:900px){
     .hero h1{font-size:42px;}
     .hero p{font-size:18px;}
@@ -387,7 +575,7 @@
       <!-- Center phone: Eisenhower Matrix -->
       <div class="phone">
         <div class="screen">
-          <img src="assets/screenshot_matrix.png" alt="GetsDone Eisenhower matrix screen">
+          <img src="assets/screenshot_matrix.png" alt="GetsDone Eisenhower matrix screen" fetchpriority="high">
         </div>
       </div>
       <!-- Right phone: Tasks -->
@@ -418,7 +606,7 @@
       <div class="feature-visual">
         <div class="phone">
           <div class="screen">
-              <img src="assets/screenshot_matrix.png" alt="GetsDone Eisenhower matrix screen">
+              <img src="assets/screenshot_matrix.png" alt="GetsDone Eisenhower matrix screen" loading="lazy" decoding="async">
           </div>
         </div>
       </div>
@@ -443,7 +631,26 @@
       <div class="feature-visual">
         <div class="phone">
           <div class="screen">
-              <img src="assets/screenshot_voice.png" alt="GetsDone voice capture screen">
+            <div class="screen-header">GetsDone</div>
+            <div class="screen-body">
+              <div class="vc-chips">
+                <div class="vc-chip vc-chip-red">📋 Pending <b>2</b></div>
+                <div class="vc-chip vc-chip-green">✓ Completed <b>0</b></div>
+              </div>
+              <div class="vc-banner">🕐 Estimated time <b>35m</b></div>
+              <div class="vc-task">Call the dentist</div>
+              <div class="vc-task">Send the quarterly report</div>
+            </div>
+            <div class="g-scrim"></div>
+            <div class="g-sheet">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="g-mic">
+                <svg viewBox="0 0 24 24" width="34" height="34"><path fill="#4285F4" d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3z"/><path fill="#34A853" d="M17 11a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg>
+                <span class="g-arc"></span>
+              </div>
+              <div class="g-prompt">Say your task…</div>
+              <div class="g-lang">English (United States)</div>
+            </div>
           </div>
         </div>
       </div>
@@ -468,7 +675,7 @@
       <div class="feature-visual">
         <div class="phone">
           <div class="screen">
-              <img src="assets/screenshot_plan.png" alt="GetsDone day timeline screen">
+              <img src="assets/screenshot_plan.png" alt="GetsDone day timeline screen" loading="lazy" decoding="async">
           </div>
         </div>
       </div>
@@ -493,7 +700,7 @@
       <div class="feature-visual">
         <div class="phone">
           <div class="screen">
-              <img src="assets/screenshot_tasks.png" alt="GetsDone tasks overview screen">
+              <img src="assets/screenshot_tasks.png" alt="GetsDone tasks overview screen" loading="lazy" decoding="async">
           </div>
         </div>
       </div>
@@ -591,6 +798,25 @@
         localStorage.setItem('gd-theme','dark');
       }
     });
+  })();
+
+  // Scroll-reveal
+  (function(){
+    var targets = document.querySelectorAll('.feature-row, .section-head, .mini-card, .preregister, .cta');
+    targets.forEach(function(el,i){
+      el.classList.add('reveal');
+      if(el.classList.contains('mini-card')) el.style.setProperty('--d',(i%3)*0.08+'s');
+    });
+    if(!('IntersectionObserver' in window)){
+      targets.forEach(function(el){el.classList.add('visible');});
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    },{threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+    targets.forEach(function(el){ io.observe(el); });
   })();
 </script>
 
